@@ -9,7 +9,7 @@
     <div class="py-12">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow px-6 py-4 sm:rounded-lg">
-                <form action="{{ route('submissions.update', $submission) }}"
+                <form action="{{ route('teams.submissions.update', [$team, $submission]) }}"
                       method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
@@ -65,7 +65,7 @@
                     </div>
 
                     <div class="flex items-center justify-end">
-                        <a href="{{ route('submissions.show', $submission) }}"
+                        <a href="{{ route('teams.submissions.show', [$team, $submission]) }}"
                            class="mr-4 text-sm text-gray-600 hover:underline">
                             {{ __('Cancelar') }}
                         </a>

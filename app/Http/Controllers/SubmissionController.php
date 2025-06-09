@@ -88,12 +88,82 @@ class SubmissionController extends Controller
      */
     public function show(Team $team, Submission $submission)
     {
-        // Só owner ou membro vê
         $this->authorize('view', $team);
+        abort_if($submission->team_id !== $team->id, 403);
+    
+        // carrega a versão atual e seus attachments
+        $submission->load('currentVersion.attachments');
+    
+        return view('submissions.show', compact('team','submission'));
+    }
 
-        // Assegura que a submissão pertence à equipe
+    
+    /**
+     * Exibe o formulário de edição de uma submissão.
+     * GET /teams/{team}/submissions/{submission}/edit
+     */
+    public function edit(Team $team, Submission $submission)
+    {
+        // Só o owner (update) pode editar
+        $this->authorize('update', $team);
+
+        // Garante que a submissão pertença à equipe
         abort_if($submission->team_id !== $team->id, 403);
 
-        return view('submissions.show', compact('team','submission'));
+        return view('submissions.edit', compact('team','submission'));
+    }
+
+    /**
+     * Atualiza os dados (e adiciona novos anexos, se houver).
+     * PUT/PATCH /teams/{team}/submissions/{submission}
+     */
+    public function update(Request $request, Team $team, Submission $submission)
+    {
+        $this->authorize('update', $team);
+        abort_if($submission->team_id !== $team->id, 403);
+
+        $data = $request->validate([
+            'title'         => 'required|string|max:255',
+            'description'   => 'nullable|string',
+            'attachments.*' => 'file|max:20480',
+        ]);
+
+        // Atualiza título e descrição
+        $submission->update([
+            'title'       => $data['title'],
+            'description' => $data['description'],
+        ]);
+
+        // Armazena novos anexos
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('submissions');
+                $submission->attachments()->create([
+                    'path'          => $path,
+                    'original_name' => $file->getClientOriginalName(),
+                ]);
+            }
+        }
+
+        return redirect()
+            ->route('teams.submissions.show', [$team, $submission])
+            ->with('success','Submissão atualizada com sucesso.');
+    }
+
+    /**
+     * (Opcional) Remove uma submissão.
+     * DELETE /teams/{team}/submissions/{submission}
+     */
+    public function destroy(Team $team, Submission $submission)
+    {
+        $this->authorize('delete', $team);
+        abort_if($submission->team_id !== $team->id, 403);
+
+        $submission->attachments()->delete();
+        $submission->delete();
+
+        return redirect()
+            ->route('teams.submissions.index', $team)
+            ->with('success','Submissão removida.');
     }
 }

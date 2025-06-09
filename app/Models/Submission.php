@@ -13,8 +13,15 @@ class Submission extends Model
         return $this->belongsTo(Team::class);
     }
 
-    public function attachments()
+    // A versão “atual” (mais recente)
+    public function currentVersion()
     {
-        return $this->hasMany(SubmissionAttachment::class);
+        return $this->hasOne(SubmissionVersion::class)
+                    ->latestOfMany('version_number');
+    }
+
+    public function versions()
+    {
+        return $this->hasMany(SubmissionVersion::class);
     }
 }

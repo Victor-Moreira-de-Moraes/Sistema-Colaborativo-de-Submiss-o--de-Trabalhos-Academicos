@@ -12,4 +12,9 @@ class SubmissionAttachment extends Model
     {
         return $this->belongsTo(Submission::class);
     }
+
+    public function version()
+    {
+        return $this->belongsTo(SubmissionVersion::class, 'submission_version_id');
+    }
 }

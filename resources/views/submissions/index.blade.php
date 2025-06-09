@@ -20,13 +20,14 @@
             @else
                 <ul class="bg-white shadow overflow-hidden sm:rounded-lg divide-y divide-gray-200">
                     @foreach($subs as $sub)
-                        <li class="…">
-                            <!-- Link para ver -->
+                        <li class="flex justify-between items-center border-t last:border-b">
                             <a href="{{ route('teams.submissions.show', [$team, $sub]) }}"
-                                class="text-blue-600 hover:underline">
+                               class="block px-4 py-2 flex-1 hover:bg-gray-50">
                                 {{ $sub->title }}
                             </a>
-                            <!-- Data… -->
+                            <span class="px-4 text-sm text-gray-500">
+                                {{ $sub->created_at->format('d/m/Y') }}
+                            </span>
                         </li>
                     @endforeach
                 </ul>

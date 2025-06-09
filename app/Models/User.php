@@ -58,4 +58,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Team::class, 'owner_id');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
