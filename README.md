@@ -2,7 +2,7 @@
 
 Projeto para gerenciamento de equipes, submissões e versões de trabalhos com revisão colaborativa.
 
-## OBS: CASO NÃO CONSIGA INICIALISAR O PROJETO, TEM UM PDF COM NOME DE "TELAS.PDF", MOSTRANDO TODAS AS TELAS DO PROJETO.
+## OBS: CASO NÃO CONSIGA INICIALIZAR O PROJETO, TEM UM PDF COM NOME DE "TELAS.PDF", MOSTRANDO TODAS AS TELAS DO PROJETO.
 
 ## Pré-requisitos
 
